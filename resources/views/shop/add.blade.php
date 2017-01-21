@@ -8,7 +8,7 @@
 
     {{ Form::label('brand', 'brand') }}
     <select name="brand">
-        <option selected value="0">New Brand</option>
+        <option selected disabled>New Brand</option>
         @foreach($brands->getBrand() as $brand)
 
             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
@@ -18,20 +18,12 @@
 
     {{ Form::text('newBrand') }} <br>
 
-    {{ Form::label('model', 'model') }}
-    <select name="model">
-        <option selected value="0" >New Model</option>
-        @foreach($brand_models->getBrandModel() as $brand_model)
-
-            <option value="{{ $brand_model->id }}">{{ $brand_model->name }}</option>
-
-        @endforeach
-    </select>
+    {{ Form::label('newBrandModel', 'model') }}
     {{ Form::text('newBrandModel') }} <br>
 
     {{ Form::label('category', 'category') }}
     <select name="category">
-        <option selected value="0">New Category</option>
+        <option selected disabled>New Category</option>
         @foreach($categories->getCategory() as $category)
 
             <option value="{{ $category->id }}">{{ $category->name }}</option>

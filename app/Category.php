@@ -18,6 +18,10 @@ class Category extends Model
         'description'
     ];
 
+    public $rules = [
+        'name' => 'required|unique:categories|max:255',
+        'parent_id' => 'integer|exists:categories,id'
+    ];
     public function product()
     {
         return $this->hasMany('App\Product', 'cat_id');

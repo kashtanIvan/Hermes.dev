@@ -15,6 +15,11 @@ class BrandModel extends Model
         'brand_id',
         'description'
     ];
+    
+    public $rules = [
+        'name' => 'required|max:255',
+        'brand_id' => 'integer|exists:brands,id'
+    ];
 
     public function brand()
     {

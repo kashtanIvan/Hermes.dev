@@ -15,6 +15,10 @@ class Brand extends Model
         'description'
     ];
 
+    public $rules = [
+        'name' => 'required|unique:brands|max:255',
+    ];
+
     public function brandModel()
     {
         return $this->hasMany('App\BrandModel');
