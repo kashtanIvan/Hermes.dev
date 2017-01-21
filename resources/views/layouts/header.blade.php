@@ -7,9 +7,9 @@
     <div class="container">
         <div class="block-auth fl-r">
 
-                <a href="#">Login</a>
+                <a href="login">Login</a>
                 <span class="separator">/</span>
-                <a href="#">Registration</a>
+                <a href="register">Registration</a>
 
         </div>
     </div>

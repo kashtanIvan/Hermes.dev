@@ -24,4 +24,6 @@ Route::group(['prefix' => 'categories'], function () {
 
 Route::resource('product', 'ProductController');
 
+Route::get('register', ['as' => 'register', 'uses' => 'Auth\RegisterController@showRegisterForm']);
+Route::post('register', ['as' => 'register', 'uses' => 'Auth\RegisterController@createUser']);
 

@@ -18,6 +18,12 @@ class Product extends Model
         'slug'
     ];
 
+    public $rules = [
+        'brand_id' => 'integer|exists:brands,id',
+        'model_id' => 'integer|exists:brand_models,id',
+        'cat_id' => 'integer|exists:categories,id',
+    ];
+
     public function attributes()
     {
         return $this->belongsToMany('App\Attribute', 'prod_attr', 'prod_id', 'attr_id');

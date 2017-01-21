@@ -13,7 +13,6 @@ class ProductService
 {
     private $_filterService = false;
 
-    private $array = [];
     private $error = [];
 
     private $brandPk = 'id';
@@ -43,62 +42,9 @@ class ProductService
     public function addProduct($data)
     {
 
-        $this->sliceOnEntity($data);
+        $sliceOnEntity = $this->sliceOnEntity($data);
+        dd($sliceOnEntity);
         exit();
-        dd($data);
-        $product = new Product();
-
-        if (!is_null($data->brand)) {
-            //dd($data->brand);
-            $this->array['brand_id'] = $data->brand;
-        } else if (!empty($data->newBrand)) {
-            //dd($data->newBrand);
-            $brand = new Brand();
-            $brand->name = $data->newBrand;
-            $brand->save();
-            $this->array['brand_id'] = $brand->id;
-        } else {
-            //dd('sad');
-            $this->error['brand'] = "Brand not find";
-            return $this->error;
-        }
-
-        if (!is_null($data->model)) {
-            $this->array['model_id'] = $data->brand;
-        } else if (!empty($data->newBrandModel)) {
-            $model = new BrandModel();
-            $model->name = $data->newBrandModel;
-            $model->brand_id = $this->array['brand_id'];
-            $model->save();
-            $this->array['model_id'] = $model->id;
-        } else {
-            $this->error['model'] = "Model not find";
-        }
-
-        if (!is_null($data->category)) {
-            $this->array['cat_id'] = $data->category;
-        } else if (!empty($data->newCategory)) {
-            $category = new Category();
-            $category->name = $data->newCategory;
-            $category->slug = $data->slug;
-            $category->hidden = $data->hidden;
-            $category->save();
-            $this->array['cat_id'] = $category->id;
-        } else {
-            $this->error['category'] = "Category not find";
-        }
-
-        $this->array = array_merge($this->array, ['hidden' => $data->hidden,
-            'description' => $data->description,
-            'slug' => $data->slug]);
-        if (!empty($this->error)) {
-        }
-
-//        $result = $this->_filterService->saveData($data);
-//        $result = $product->fill($result)->save();
-//        if ($result)
-//            return true;
-//        else return false;
     }
 
 
@@ -174,8 +120,22 @@ class ProductService
             $this->error[] = 'Category not found';
         }
 
-        dd($brandModel->toArray(), $brand->toArray(), $category->toArray(), $this->error);
-
-        return [$brand, $category, $product];
+        if (empty($this->error)) {
+            $product = new Product();
+            $postProduct = [
+                'brand_id' => $brand->id,
+                'model_id' => $brandModel->id,
+                'cat_id' => $category->id,
+            ];
+            $validator = Validator::make($postProduct, $product->rules);
+            if ($validator->fails()) {
+                $this->error = array_merge($this->error, $validator->errors()->all());
+            } else {
+                $product = $product::create($postProduct);
+            }
+        } else {
+            dd($brandModel->toArray(), $brand->toArray(), $category->toArray(), $category->toArray(), $this->error);
+        }
+        return [$brand, $category, $brandModel,$product];
     }
 }
