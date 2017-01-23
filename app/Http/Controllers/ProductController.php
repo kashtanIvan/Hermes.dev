@@ -51,7 +51,9 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //dd($request);
-        $result = $this->_productServices->addProduct($request);
+//        $result = $this->_productServices->addProduct($request);
+        list($brand, $category, $brandModel,$product) = $this->_productServices->addProduct($request);
+        $result = true; // заглушка
         if ($result)
             return 'ok';
         else return redirect()->back();

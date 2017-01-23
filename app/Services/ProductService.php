@@ -42,9 +42,9 @@ class ProductService
     public function addProduct($data)
     {
 
-        $sliceOnEntity = $this->sliceOnEntity($data);
-        dd($sliceOnEntity);
-        exit();
+        return $this->sliceOnEntity($data);
+
+
     }
 
 

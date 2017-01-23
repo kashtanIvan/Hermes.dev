@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+//use Cartalyst\Sentinel\Sentinel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class RegisterController extends Controller
 {
@@ -71,10 +74,32 @@ class RegisterController extends Controller
 
 
     public function showRegisterForm(){
+        $credentials = [
+            'email'    => 'john.doe@example.com',
+            'password' => 'password',
+        ];
+        //$user = Sentinel::register($credentials);
+       // dd($user);
         return view('auth.register');
     }
     
-    protected function createUser(array $data){
-        
+    protected function createUser(Request $data){
+
+        $credentials = $data->all();
+
+        $rules = [
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|min:6|confirmed',
+        ];
+
+        $validaror = Validator::make($credentials, $rules);
+        if(!$validaror->fails()){
+            $result = Sentinel::registerAndActivate($credentials);
+        }else {
+            return redirect()->back()->withErrors($validaror->errors());
+        }
+
+        Sentinel::authenticate($credentials);
+        return  redirect()->route('product.index');
     }
 }
