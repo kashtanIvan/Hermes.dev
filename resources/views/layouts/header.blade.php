@@ -7,13 +7,13 @@
     <div class="container">
         <div class="block-auth fl-r">
             @if(!Sentinel::check())
-                <a href="login">Login</a>
+                <a href="{{ route('login') }}">Login</a>
                 <span class="separator">/</span>
-                <a href="register">Registration</a>
+                <a href="{{ route('register') }}">Registration</a>
             @else
-                <a href="logout">Logout</a>
+                <a href="{{ route('logout') }}">Logout</a>
                 <span class="separator">/</span>
-                <a href="profile">Profile</a>
+                <a href="{{ route('profile') }}">Profile</a>
             @endif
         </div>
     </div>
