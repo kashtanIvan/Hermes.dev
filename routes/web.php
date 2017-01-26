@@ -23,8 +23,8 @@ Route::group(['prefix' => 'categories'], function () {
 
 Route::group(['middleware' => 'login'], function () {
     Route::resource('product', 'ProductController');
-    Route::get('logout', ['as' => 'logout', 'Auth\LoginController@logout']);
-    Route::get('profile', ['as' => 'profile','ProfileController@index']);
+    Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+    Route::get('profile', ['as' => 'profile', 'uses' => 'ProfileController@index']);
 
 });
 Route::get('register', ['as' => 'register', 'uses' => 'Auth\RegisterController@showRegisterForm']);
