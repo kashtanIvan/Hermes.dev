@@ -36,5 +36,7 @@ Route::post('login', ['as' => 'login', 'uses' => 'Auth\LoginController@loginUser
 Route::get('password/reset', ['as' => 'password/reset', 'uses' => 'Auth\ForgotPasswordController@index']);
 Route::post('password/email', ['as' => 'password/email', 'uses' => 'Auth\ForgotPasswordController@sendPasswordEmail']);
 
+Route::get('/add', ['as' => 'addsImage', 'uses' => 'ShopController@showFormImg']);
+Route::post('/add', ['as' => 'addsImage', 'uses' => 'ShopController@postAddImg']);
 
 

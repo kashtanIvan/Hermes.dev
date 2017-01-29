@@ -53,6 +53,7 @@ class ProductController extends Controller
         //dd($request);
 //        $result = $this->_productServices->addProduct($request);
         list($brand, $category, $brandModel,$product) = $this->_productServices->addProduct($request);
+        //dd($res);
         $result = true; // заглушка
         if ($result)
             return 'ok';
