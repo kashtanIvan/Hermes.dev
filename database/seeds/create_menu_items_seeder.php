@@ -26,8 +26,8 @@ class create_menu_items_seeder extends Seeder
             'hidden' => true
         ]);
         App\MenuItem::create([
-            'name' => 'women',
-            'slug' => 'women',
+            'name' => 'woman',
+            'slug' => 'woman',
             'menu_id' => 3,
             'order_id' => 1,
             'hidden' => true
