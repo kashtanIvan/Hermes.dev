@@ -86,8 +86,10 @@ class DatabaseSeeder extends Seeder
             'prod_id' => 2, 'attr_id' => 3,
             'prod_id' => 7, 'attr_id' => 8
         ]]);
-        
+
         (new App\Attribute())->item()->sync([['attr_id' => 2, 'item_id' => 3]]);
 */
+        $this->call(create_menu_items_seeder::class);
+
     }
 }
