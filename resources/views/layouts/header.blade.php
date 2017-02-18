@@ -1,3 +1,4 @@
+@inject('menus', 'App\Services\MainMenuService')
 <div id="back-top">
     <button class="btn"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></button>
 </div>
@@ -30,15 +31,13 @@
             </div>
         </a>
         <div class="menu">
-
             <ul class="main-menu">
-
-                <li class="active"><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('man') }}">Man</a></li>
-                <li><a href="{{ route('woman') }}">Woman</a></li>
-                <li><a href="{{ route('accessories') }}">Accessories</a></li>
-                <li><a href="{{ route('about') }}">About</a></li>
-
+                @foreach($menus->getMenus() as $menu)
+                    <li @if(Route::currentRouteName() === $menu->slug)
+                        class="active"
+                            @endif
+                    ><a href="{{ route($menu->slug) }}">{{ $menu->name }}</a></li>
+                @endforeach
             </ul>
         </div>
         <div class="icon-menu">
