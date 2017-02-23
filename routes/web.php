@@ -21,7 +21,7 @@ Route::group(['prefix' => 'categories'], function () {
     Route::get('about', ['as' => 'about', 'uses' => 'ShopController@about']);
 });
 
-Route::group(['middleware' => 'login'], function () {
+Route::group(['prefix' => 'panel', 'middleware' => 'login'], function () {
     Route::resource('product', 'ProductController');
     Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
     Route::get('profile', ['as' => 'profile', 'uses' => 'ProfileController@index']);
@@ -40,4 +40,7 @@ Route::get('/add', ['as' => 'addsImage', 'uses' => 'ShopController@showFormImg']
 Route::post('/add', ['as' => 'addsImage', 'uses' => 'ShopController@postAddImg']);
 
 Route::resource('checkout', 'CheckoutController');
+
+    Route::get('show', ['as' => 'showOrder', 'uses' => 'OrderController@show']);
+    Route::post('create', ['as' => 'create', 'uses' => 'OrderController@create']);
 
