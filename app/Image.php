@@ -10,7 +10,6 @@ class Image extends Model
     protected $table = 'images';
 
 
-
     protected $fillable = [
         'name',
         'width',
@@ -18,6 +17,13 @@ class Image extends Model
         'size',
         'location',
         'hidden'
+    ];
+
+    public $rules = [
+        'ext' => 'in:jpeg,jpg,png',
+        'width' => 'required|min:1|max:5445555',
+        'height' => 'required|min:1|max:13665',
+        'size' => 'required|min:1|max:5000000',
     ];
 
 }
