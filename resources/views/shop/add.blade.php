@@ -4,7 +4,18 @@
 @inject('categories', 'App\Services\ProductService')
 
 @section('content')
-    {{ Form::open(array('url' => 'product')) }} <br>
+    {{ Form::open(array('url' => 'panel/product', 'enctype' => 'multipart/form-data')) }} <br>
+
+    {{ Form::label('category', 'category') }}
+    <select name="category">
+        <option selected disabled>New Category</option>
+        @foreach($categories->getCategory() as $category)
+
+            <option value="{{ $category->id }}">{{ $category->name }}</option>
+
+        @endforeach
+    </select>
+    {{ Form::text('newCategory') }} <br>
 
     {{ Form::label('brand', 'brand') }}
     <select name="brand">
@@ -21,16 +32,7 @@
     {{ Form::label('newBrandModel', 'model') }}
     {{ Form::text('newBrandModel') }} <br>
 
-    {{ Form::label('category', 'category') }}
-    <select name="category">
-        <option selected disabled>New Category</option>
-        @foreach($categories->getCategory() as $category)
 
-            <option value="{{ $category->id }}">{{ $category->name }}</option>
-
-        @endforeach
-    </select>
-    {{ Form::text('newCategory') }} <br>
     <br>
 
     {{ Form::label('hidden', 'hidden') }}
@@ -41,13 +43,15 @@
     {{ Form::label('slug', 'slug') }}
     {{ Form::text('slug') }} <br>
 
+    Отправить этот файл: <input name="image" type="file" />
+
     <!--{{ Form::macro('myMacro', function(){
         return '<input type="some" id = "s">';
     })
     }}
     {{ Form::label('s', 'myMacro') }}
     {!! Form::myMacro() !!}
-    <br>-->
+            <br>-->
     {{ Form::submit('Submit') }}
     {{ Form::close() }}
 @endsection
