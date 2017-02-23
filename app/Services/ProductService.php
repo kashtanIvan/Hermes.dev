@@ -132,10 +132,13 @@ class ProductService
                 $this->error = array_merge($this->error, $validator->errors()->all());
             } else {
                 $product = $product::create($postProduct);
+//                dd($product);
+                //$brand->product()->sync(['brand_id' => $brand->id]);
             }
         } else {
-            dd($brandModel->toArray(), $brand->toArray(), $category->toArray(), $category->toArray(), $this->error);
+            return $this->error;
+//            dd($brandModel->toArray(), $brand->toArray(), $category->toArray(), $category->toArray(), $this->error);
         }
-        return [$brand, $category, $brandModel,$product];
+        return [$brand, $category, $brandModel,$product, $this->error];
     }
 }
