@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Services\ImageService;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
+//use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use App\Services\ProductService;;
@@ -9,15 +12,20 @@ use App\Services\ProductService;;
 class ProductController extends Controller
 {
     private $_productServices = false;
+    private $_imageServices = false;
 
     public function __construct()
     {
         $this->productService();
+        $this->imageService();
     }
 
     public function productService()
     {
         $this->_productServices = new ProductService();
+    }
+    public function imageService(){
+        $this->_imageServices = new ImageService();
     }
 
     /**
@@ -27,9 +35,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $brand = $this->_productServices->getBrand();
-
-        return view('shop.add')->with('brand' , $brand);
+        $title = 'Cabinet';
+//        $brand = $this->_productServices->getBrand();
+        $user = Sentinel::check();
+        return view('shop.cabinet')->with(['user' => $user, 'title' => $title]); //->with('brand' , $brand);
     }
 
     /**
@@ -39,7 +48,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Cabinet';
+        return view('shop.add')->with('title', $title);
     }
 
     /**
@@ -50,10 +60,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
-//        $result = $this->_productServices->addProduct($request);
-        list($brand, $category, $brandModel,$product) = $this->_productServices->addProduct($request);
-        //dd($res);
+        $this->_imageServices->addImage($request);
+        $res = list($brand, $category, $brandModel,$product) = $this->_productServices->addProduct($request);
+//        dd($res);
         $result = true; // заглушка
         if ($result)
             return 'ok';
