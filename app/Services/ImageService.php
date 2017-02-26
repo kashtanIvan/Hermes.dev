@@ -27,18 +27,27 @@ class ImageService
 
     public function addImage($data){
         $file = $data->file()['image'];
-        $imagick = Imagick::make($file);
-//        dd($file, $imagick);
+        list($width,$height) = getimagesize($file->path());
         $postImage = [
             'ext' => $file->getClientOriginalExtension(),
-            'width' => $imagick->width(),
-            'height' => $imagick->height(),
-            'size' => $imagick->filesize(),
+            'width' => $width,
+            'height' => $height,
+            'size' => $file->getsize(),
         ];
-//        dd($postImage);
         $image = new Image();
         $validator = Validator::make($postImage, $image->rules);
-        dd($validator->errors()->all());
+        if($validator->fails()) {
+            dd($validator->errors()->all());
+        }
+        else{
+            $image = $image->create($postImage);
+//            dd($image);
+            $imageName = $image->id;
+            $image->name = $imageName;
+            $image->save();
+            $file->move(env('ROOT_IMAGE'), $imageName. '.' .$image->ext);
+            dd($image, $image->id);
+        }
     }
 
     public function getAnyImage()
