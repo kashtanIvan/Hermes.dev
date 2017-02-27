@@ -25,6 +25,14 @@ class CreateImagesTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('mini_images', function (Blueprint $table) {
+            $table->increments('id')->index();
+            $table->integer('original_id')->default(0)->index();
+            $table->integer('size')->default(0);
+            $table->string('location')->default('/');
+            $table->timestamps();
+        });
+
         Schema::create('image_products', function (Blueprint $table) {
             $table->increments('id')->index();
             $table->integer('image_id')->default(0);
@@ -41,6 +49,7 @@ class CreateImagesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('images');
+        Schema::dropIfExists('mini_images');
         Schema::dropIfExists('image_products');
     }
 }
