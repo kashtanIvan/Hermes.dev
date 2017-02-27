@@ -14,6 +14,7 @@ class ImageService
 {
 
     private $_cache;
+    private $countImages = 50;
 
     public function __construct()
     {
@@ -41,12 +42,13 @@ class ImageService
         }
         else{
             $image = $image->create($postImage);
-//            dd($image);
             $imageName = $image->id;
             $image->name = $imageName;
+            $loc ='/' . (int)floor($image->id / $this->countImages);
+            $image->location = $loc;
             $image->save();
-            $file->move(env('ROOT_IMAGE'), $imageName. '.' .$image->ext);
-            dd($image, $image->id);
+            $root = env('ROOT_IMAGE') . $loc;
+            $file->move($root, $imageName. '.' .$image->ext);
         }
     }
 
