@@ -18,7 +18,7 @@ class CreateImagesTable extends Migration
             $table->string('name', 255)->default('Unknown');
             $table->string('ext')->default('jpg');
             $table->integer('width')->default(0);
-            $table->integer('heigth')->default(0);
+            $table->integer('height')->default(0);
             $table->integer('size')->default(0);
             $table->boolean('hidden')->default(true);
             $table->string('location')->default('/');
