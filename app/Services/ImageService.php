@@ -4,6 +4,9 @@
 namespace App\Services;
 
 use App\Image;
+use App\MiniImage;
+//use File;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
@@ -26,9 +29,10 @@ class ImageService
         return 'Pong';
     }
 
-    public function addImage($data){
+    public function addImage($data)
+    {
         $file = $data->file()['image'];
-        list($width,$height) = getimagesize($file->path());
+        list($width, $height) = getimagesize($file->path());
         $postImage = [
             'ext' => $file->getClientOriginalExtension(),
             'width' => $width,
@@ -37,18 +41,33 @@ class ImageService
         ];
         $image = new Image();
         $validator = Validator::make($postImage, $image->rules);
-        if($validator->fails()) {
+        if ($validator->fails()) {
             dd($validator->errors()->all());
-        }
-        else{
+        } else {
             $image = $image->create($postImage);
+            dd($image);
             $imageName = $image->id;
             $image->name = $imageName;
-            $loc ='/' . (int)floor($image->id / $this->countImages);
-            $image->location = $loc;
+            $image->location = '/' . (int)floor($image->id / $this->countImages) . '/';
             $image->save();
-            $root = env('ROOT_IMAGE') . $loc;
-            $file->move($root, $imageName. '.' .$image->ext);
+
+            $root = env('ROOT_IMAGE') . $image->location;
+            $file->move($root, $imageName . '.' . $image->ext);
+
+            $minImage = MiniImage::create([
+                'original_id' => $image->id,
+                'location' => '/mini/',
+            ]);
+            $oldPath = $root . $imageName . '.' . $image->ext;
+            $newPath = $root . $minImage->location . $minImage->id . '.' . 'jpg';
+            if (!file_exists($root . $minImage->location)) {
+                File::makeDirectory($root . $minImage->location);
+            }
+            Imagick::make($oldPath)->encode('jpg', 0)->resize(300, 200)->save($newPath);
+            if(!file_exists($newPath)){
+                dd(file_exists($newPath));
+            }
+            dd('ok');
         }
     }
 
