@@ -12,6 +12,7 @@ class Image extends Model
 
     protected $fillable = [
         'name',
+        'ext',
         'width',
         'height',
         'size',
