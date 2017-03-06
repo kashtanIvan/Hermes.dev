@@ -18,6 +18,7 @@ class ImageService
 
     private $_cache;
     private $countImages = 50;
+    private $errors = [];
 
     public function __construct()
     {
@@ -32,6 +33,7 @@ class ImageService
     public function addImage($data)
     {
         $file = $data->file()['image'];
+//        dd($data);
         list($width, $height) = getimagesize($file->path());
         $postImage = [
             'ext' => $file->getClientOriginalExtension(),
@@ -42,21 +44,23 @@ class ImageService
         $image = new Image();
         $validator = Validator::make($postImage, $image->rules);
         if ($validator->fails()) {
-            dd($validator->errors()->all());
+            $this->errors = array_merge($this->errors, $validator->errors()->all());
         } else {
             $image = $image->create($postImage);
-            dd($image);
             $imageName = $image->id;
             $image->name = $imageName;
             $image->location = '/' . (int)floor($image->id / $this->countImages) . '/';
             $image->save();
-
             $root = env('ROOT_IMAGE') . $image->location;
             $file->move($root, $imageName . '.' . $image->ext);
 
+            if(!file_exists($root . $imageName . '.' . $image->ext)){
+                $this->errors = array_merge($this->errors, 'File not save!!!');
+            }
+
             $minImage = MiniImage::create([
                 'original_id' => $image->id,
-                'location' => '/mini/',
+                'location' => 'mini/',
             ]);
             $oldPath = $root . $imageName . '.' . $image->ext;
             $newPath = $root . $minImage->location . $minImage->id . '.' . 'jpg';
@@ -65,10 +69,16 @@ class ImageService
             }
             Imagick::make($oldPath)->encode('jpg', 0)->resize(300, 200)->save($newPath);
             if(!file_exists($newPath)){
-                dd(file_exists($newPath));
+                $this->errors = array_merge($this->errors, 'Mini file not save!!!');
             }
-            dd('ok');
         }
+        if(!empty($this->errors)){
+            return $this->errors;
+        }
+        else{
+            return $image->id;
+        }
+        exit();
     }
 
     public function getAnyImage()
