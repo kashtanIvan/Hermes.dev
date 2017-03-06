@@ -3,10 +3,12 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 use App\Product;
+use App\Services\ImageService;
 
 use App\Brand;
 use App\BrandModel;
 use App\Category;
+use App\ImageProduct;
 use Illuminate\Support\Facades\Validator;
 
 class ProductService
@@ -19,11 +21,13 @@ class ProductService
     private $brandName = 'name';
 
     private $_validator;
+    private $_imageService;
 
     public function __construct()
     {
         $this->filterService();
         $this->createValidator();
+        $this->imageService();
     }
 
     public function filterService()
@@ -37,6 +41,11 @@ class ProductService
             $this->_validator = new Validator();
         }
         return $this->_validator;
+    }
+
+    public function imageService()
+    {
+        $this->_imageService = new ImageService();
     }
 
     public function addProduct($data)
@@ -66,9 +75,21 @@ class ProductService
 
     protected function sliceOnEntity($data)
     {
-        //dd($data->all());
+//        dd($data->all());
         $data['parent_id'] = '1';
-        $brand = $category = $product = $brandModel = false;
+        $brand = $category = $product = $brandModel = $imageProd = false;
+        if (array_key_exists('image', $data->all())) {
+            $imageRes = $this->_imageService->addImage($data);
+//            dd($imageErrors );
+            if (is_array($imageRes)) {
+                $this->error = array_merge($this->error, $imageRes);
+            } else {
+                $postImage = [
+                    'image_id' => $imageRes,
+                ];
+            }
+        }
+
         if (array_key_exists('brand', $data->all())) {
             $brand = (new Brand())->find($data['brand']);
         } elseif (array_key_exists('newBrand', $data->all())) {
@@ -134,11 +155,16 @@ class ProductService
                 $product = $product::create($postProduct);
 //                dd($product);
                 //$brand->product()->sync(['brand_id' => $brand->id]);
+                $postImage['prod_id'] = $product->id;
+                $imageProd = new ImageProduct();
+                $imageProd = $imageProd::create($postImage);
+//                dd($postImage);
             }
         } else {
             return $this->error;
 //            dd($brandModel->toArray(), $brand->toArray(), $category->toArray(), $category->toArray(), $this->error);
         }
-        return [$brand, $category, $brandModel,$product, $this->error];
+//        dd($brand, $category, $brandModel, $product);
+        return [$brand, $category, $brandModel, $product, $imageProd, $this->error];
     }
 }
