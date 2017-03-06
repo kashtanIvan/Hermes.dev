@@ -53,4 +53,9 @@ class Product extends Model
     {
         return $this->hasOne('App\Category', 'parent_id');
     }
+
+    public function imageProduct()
+    {
+        return $this->hasOne('App\ImageProduct', 'prod_id');
+    }
 }
