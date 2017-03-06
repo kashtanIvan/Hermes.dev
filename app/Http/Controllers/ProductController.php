@@ -60,9 +60,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $this->_imageServices->addImage($request);
-        $res = list($brand, $category, $brandModel,$product) = $this->_productServices->addProduct($request);
-//        dd($res);
+//        $this->_imageServices->addImage($request);
+        $res = list($brand, $category, $brandModel,$product, $imageProdect) = $this->_productServices->addProduct($request);
+        dd($res);
         $result = true; // заглушка
         if ($result)
             return 'ok';
