@@ -68,7 +68,7 @@ class LoginController extends Controller
             Sentinel::authenticate($credentials);
 
         }
-        return  redirect()->route('product.index');
+        return  redirect()->route('product');
 
 
 
