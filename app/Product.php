@@ -31,22 +31,22 @@ class Product extends Model
 
     public function images()
     {
-        return $this->belongsToMany('App\Images', 'image_products', 'prod_id', 'image_id');
+        return $this->belongsToMany('App\Image', 'image_products', 'prod_id', 'image_id');
     }
 
     public function items()
     {
-        return $this->hasMany('App\Item');
+        return $this->hasMany('App\Item', 'prod_id');
     }
 
     public function brand()
     {
-        return $this->hasOne('App\Brand');
+        return $this->belongsTo('App\Brand');
     }
 
-    public function brandModel()
+    public function model()
     {
-        return $this->hasOne('App\BrandModel', 'model_id');
+        return $this->belongsTo('App\BrandModel');
     }
 
     public function category()
