@@ -9,6 +9,7 @@ use App\Brand;
 use App\BrandModel;
 use App\Category;
 use App\ImageProduct;
+use App\Image;
 use Illuminate\Support\Facades\Validator;
 
 class ProductService
@@ -70,6 +71,11 @@ class ProductService
     public function getCategory()
     {
         return DB::table('categories')->select('id', 'name')->get();
+    }
+
+    public function getAllProduct(){
+        $allProd = Product::with('category','brand','model','images', 'items')->get();
+        return $allProd;
     }
 
 
