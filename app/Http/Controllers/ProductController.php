@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Product;
 use App\Services\ImageService;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
@@ -37,8 +38,16 @@ class ProductController extends Controller
     {
         $title = 'Cabinet';
 //        $brand = $this->_productServices->getBrand();
+        $product = $this->_productServices->getAllProduct();
+        $product = $product->toArray();
+//        dd($product);
+//        dd($product['0']['images'][0]['location']);
         $user = Sentinel::check();
-        return view('shop.cabinet')->with(['user' => $user, 'title' => $title]); //->with('brand' , $brand);
+        return view('auth.cabinet.product')->with([
+            'user' => $user,
+            'title' => $title,
+            'products' => $product
+        ]); //->with('brand' , $brand);
     }
 
     /**
@@ -61,7 +70,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 //        $this->_imageServices->addImage($request);
-        $res = list($brand, $category, $brandModel,$product, $imageProdect) = $this->_productServices->addProduct($request);
+        $res = list($brand, $category, $brandModel, $product, $imageProdect) = $this->_productServices->addProduct($request);
         dd($res);
         $result = true; // заглушка
         if ($result)
