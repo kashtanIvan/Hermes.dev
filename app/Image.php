@@ -27,4 +27,8 @@ class Image extends Model
         'size' => 'required|min:1|max:5000000',
     ];
 
+    public function imageProduct(){
+        return $this->hasOne('App\ImageProduct', 'prod_id');
+    }
+
 }
