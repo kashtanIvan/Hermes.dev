@@ -22,7 +22,7 @@ Route::group(['prefix' => 'categories'], function () {
 });
 
 Route::group(['prefix' => 'panel', 'middleware' => 'login'], function () {
-    Route::get('/', ['as' => 'product', 'uses' => 'ProductController@index']);
+    Route::get('/', ['as' => 'product', 'uses' => 'ProfileController@indexCabinet']);
     Route::resource('product', 'ProductController');
     Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
     Route::get('profile', ['as' => 'profile', 'uses' => 'ProfileController@index']);
