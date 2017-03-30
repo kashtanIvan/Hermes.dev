@@ -43,7 +43,7 @@
                     <td>{{ $product['id'] }}</td>
                     <td><img src="{{'..//' . env('ROOT_IMAGE')
                     . $product['images'][0]['location']
-                    . 'mini//'
+                    . 'mini/'
                     . $product['images'][0]['name'] . '.'
                     . $product['images'][0]['ext'] }}"></td>
                     <td>{{ $product['brand']['name'] }}</td>
