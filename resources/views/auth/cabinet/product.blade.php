@@ -49,7 +49,9 @@
                     <td>{{ $product['brand']['name'] }}</td>
                     <td>{{ $product['model']['name'] }}</td>
                     <td>{{ $product['items'][0]['price'] }}</td>
-                    <td>Отображение</td>
+                    <td>
+                        {{ HelpFD::statusHiddenTable($product['hidden']) }}
+                    </td>
                     <td>Управление</td>
                 </tr>
             @endforeach
