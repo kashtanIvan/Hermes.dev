@@ -28,31 +28,50 @@
 
 
     <div class="container-fluid">
-        <table class="table table-bordered">
-            <tr class="text-center">
-                <td>ID</td>
-                <td>Фото</td>
-                <td>Бренд</td>
-                <td>Модель</td>
-                <td>Цена</td>
-                <td>Отображение</td>
-                <td>Управление</td>
+        <table class="table text-center table-bordered">
+            <tr class="">
+                <th class="text-center">ID</th>
+                <th class="text-center">Фото</th>
+                <th class="text-center">Бренд</th>
+                <th class="text-center">Модель</th>
+                <th class="text-center">Цена</th>
+                <th class="text-center">Отображение</th>
+                <th class="text-center">Управление</th>
             </tr>
             @foreach( $products as $product)
                 <tr>
                     <td>{{ $product['id'] }}</td>
                     <td><img src="{{'..//' . env('ROOT_IMAGE')
-                    . $product['images']['0']['location']
+                    . $product['images'][0]['location']
                     . 'mini//'
-                    . $product['images']['0']['name'] . '.'
-                    . $product['images']['0']['ext'] }}"></td>
+                    . $product['images'][0]['name'] . '.'
+                    . $product['images'][0]['ext'] }}"></td>
                     <td>{{ $product['brand']['name'] }}</td>
                     <td>{{ $product['model']['name'] }}</td>
                     <td>{{ $product['items'][0]['price'] }}</td>
                     <td>
                         {{ HelpFD::statusHiddenTable($product['hidden']) }}
                     </td>
-                    <td>Управление</td>
+                    <td>
+{{--                        <a href="{{ route('product.edit',['product' => $product['id']]) }}" style="color:#ba933e;"><i class="fa fa-pencil "></i></a>--}}
+
+                        {!! Form::open(['url' =>route('product.edit',['product' => $product['id']]),'method'=>'GET','style'=>'display:inline-block' ]) !!}
+                        {!! Form::hidden('action','edit') !!}
+                        {!! Form::button('<i class="fa fa-pencil "></i>',['class'=>'btn btn-brown','type'=>'submit']) !!}
+                        {!! Form::close() !!}
+
+                        {!! Form::open(['url' =>route('product.edit',['product' => $product['id']]),'method'=>'GET','style'=>'display:inline-block' ]) !!}
+                        {!! Form::hidden('action','show') !!}
+                        {!! Form::button('<i class="fa fa-eye "></i>',['class'=>'btn btn-brown','type'=>'submit']) !!}
+                        {!! Form::close() !!}
+
+                        {{--<a href="#" style="color:#ba933e;"><i class="fa fa-eye"></i></a>--}}
+
+                        {!! Form::open(['url' =>route('product.destroy',['product' => $product['id']]),'method'=>'GET','style'=>'display:inline-block' ]) !!}
+                        {!! Form::hidden('action','delete') !!}
+                        {!! Form::button('<i class="fa fa-trash "></i>',['class'=>'btn btn-brown','type'=>'submit']) !!}
+                        {!! Form::close() !!}
+                    </td>
                 </tr>
             @endforeach
         </table>
