@@ -91,5 +91,11 @@ class DatabaseSeeder extends Seeder
 */
         $this->call(create_menu_items_seeder::class);
 
+        $imageProd = [
+            'prod_id' => 1,
+            'image_id' => 1,
+        ];
+        $imageProd = App\ImageProduct::create($imageProd);
+
     }
 }
