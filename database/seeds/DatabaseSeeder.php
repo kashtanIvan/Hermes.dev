@@ -97,5 +97,11 @@ class DatabaseSeeder extends Seeder
         ];
         $imageProd = App\ImageProduct::create($imageProd);
 
+        $image = [
+            'name' => 1,
+            'location' => '/0/'
+        ];
+        $image = App\Image::create($image);
+
     }
 }
