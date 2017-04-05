@@ -24,8 +24,11 @@
         {{ Form::submit('change password') }}
         {{ Form::close() }}
 
-    </div>
+        @if(session('del'))
+           Продукт удален
+        @endif
 
+    </div>
 
     <div class="container-fluid">
         <table class="table text-center table-bordered">
@@ -41,19 +44,19 @@
             @foreach( $products as $product)
                 <tr>
                     <td>{{ $product['id'] }}</td>
-                    <td><img src="{{'..//' . env('ROOT_IMAGE')
+                    <td><img src="{{'../' . env('ROOT_IMAGE')
                     . $product['images'][0]['location']
                     . 'mini/'
                     . $product['images'][0]['name'] . '.'
                     . $product['images'][0]['ext'] }}"></td>
                     <td>{{ $product['brand']['name'] }}</td>
                     <td>{{ $product['model']['name'] }}</td>
-                    <td>{{ $product['items'][0]['price'] }}</td>
+                    <td>{{ $product['items'][0]['price'] or '---' }}</td>
                     <td>
                         {{ HelpFD::statusHiddenTable($product['hidden']) }}
                     </td>
                     <td>
-{{--                        <a href="{{ route('product.edit',['product' => $product['id']]) }}" style="color:#ba933e;"><i class="fa fa-pencil "></i></a>--}}
+                        {{--                        <a href="{{ route('product.edit',['product' => $product['id']]) }}" style="color:#ba933e;"><i class="fa fa-pencil "></i></a>--}}
 
                         {!! Form::open(['url' =>route('product.edit',['product' => $product['id']]),'method'=>'GET','style'=>'display:inline-block' ]) !!}
                         {!! Form::hidden('action','edit') !!}
@@ -67,7 +70,7 @@
 
                         {{--<a href="#" style="color:#ba933e;"><i class="fa fa-eye"></i></a>--}}
 
-                        {!! Form::open(['url' =>route('product.destroy',['product' => $product['id']]),'method'=>'GET','style'=>'display:inline-block' ]) !!}
+                        {!! Form::open(['url' =>route('product.destroy',['product' => $product['id']]),'method'=>'DELETE','style'=>'display:inline-block' ]) !!}
                         {!! Form::hidden('action','delete') !!}
                         {!! Form::button('<i class="fa fa-trash "></i>',['class'=>'btn btn-brown','type'=>'submit']) !!}
                         {!! Form::close() !!}
