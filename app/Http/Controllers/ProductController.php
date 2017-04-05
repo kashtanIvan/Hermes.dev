@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Product;
 use App\Services\ImageService;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
@@ -8,7 +9,9 @@ use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 //use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
-use App\Services\ProductService;;
+use App\Services\ProductService;
+
+;
 
 class ProductController extends Controller
 {
@@ -25,7 +28,9 @@ class ProductController extends Controller
     {
         $this->_productServices = new ProductService();
     }
-    public function imageService(){
+
+    public function imageService()
+    {
         $this->_imageServices = new ImageService();
     }
 
@@ -46,7 +51,8 @@ class ProductController extends Controller
         return view('auth.cabinet.product')->with([
             'user' => $user,
             'title' => $title,
-            'products' => $product
+            'products' => $product,
+//            'delete' => false,
         ]); //->with('brand' , $brand);
     }
 
@@ -98,6 +104,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         //
+        $res = $this->_productServices->getProductById($id);
+        dd($id);
     }
 
     /**
@@ -120,6 +128,13 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $prod = Product::find($id);
+        if ($prod->delete()) {
+            session()->flash('del', true);
+            return redirect()->back();
+        } else {
+            return redirect()->back();
+        }
+
     }
 }
